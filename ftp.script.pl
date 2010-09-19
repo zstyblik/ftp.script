@@ -1,17 +1,23 @@
 #!/usr/bin/perl
-# 2010/Jan/01 @ Zdenek Styblik
+# 2010/09/19 @ Zdenek Styblik
+#
+# Desc: strip everything except A-Za-z0-9_-.
+#
 use strict;
 use warnings;
+use File::Basename;
+
+sub help {
+	print <<HELP
+	This is going to help!.
+HELP
+} # sub help
 
 sub purifyFName {
 	my $self = $_;
 	my $string = shift;
 	my @charArr = split(//, $string);
 	my $newStr = '';
-
-	if ($string =~ /^\+./) {
-		return $string;
-	}
 
 	my $arrSize = scalar @charArr;
 	my @arrNewStr = qw();
@@ -66,6 +72,9 @@ sub scanDir {
 	closedir DIR;
 	foreach my $file (@files) {
 		if (-d $file) {
+			if ($file eq '+upload') {
+				next;
+			} # if $file eq +upload
 			my $newFile = &purifyFName($file);
 			print "Diving into $newFile\n";
 			&scanDir($newFile);
@@ -76,12 +85,22 @@ sub scanDir {
 	chdir('../');
 } # sub scanDir
 
-if ( -d $ARGV[0] ) {
-	my $newDirName = &purifyFName($ARGV[0]);
-	print "Going to scan $newDirName\n";
-	&scanDir($newDirName);
-} else {
-	print &purifyFName($ARGV[0])."\n";
-} # else -d $ARGV[0]
+if (!$ARGV[0]) {
+	&help;
+	exit 1;
+} # if !$ARGV[0]
+
+for my $argument (@ARGV) {
+	if ( -d $argument ) {
+		my $cwd = dirname($argument);
+		my $dir = basename($argument);
+		chdir($cwd);
+		my $newDirName = &purifyFName($dir);
+		print "Going to scan $newDirName\n";
+		&scanDir($newDirName);
+	} else {
+		print &purifyFName($argument)."\n";
+	} # else -d $argument
+} # for $argument
 
 1;
