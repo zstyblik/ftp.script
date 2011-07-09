@@ -8,7 +8,7 @@ use warnings;
 use File::Basename;
 
 sub help {
-	printf("%s: script for clearing filenames of non-ASCII chars.\n");
+	printf("%s: script for clearing filenames of non-ASCII chars.\n", $0);
 	printf("Usage: %s <PATH>\n", $0);
 	return 0;
 } # sub help
@@ -88,21 +88,42 @@ sub scanDir {
 	chdir('../');
 } # sub scanDir
 
-if (!$ARGV[0]) {
+# One or more arguments are passed.
+# 
+# Argument can be:
+# * file
+# * directory, either relative or absolute path
+#
+# 1] file
+# * chdir($dirname)
+# * sanitize filename
+#
+# 2] directory
+# * chdir($dirname)
+# * mv $(basename) $newName
+# * cwd $newName
+# * scan directory
+
+my $numArgs = $#ARGV + 1;
+
+if ($numArgs < 1) {
 	&help;
 	exit 1;
 } # if !$ARGV[0]
 
 for my $argument (@ARGV) {
 	if ( -d $argument ) {
-		my $cwd = dirname($argument);
-		my $dir = basename($argument);
-		chdir($cwd);
-		my $newDirName = &purifyFName($dir);
+		my $cwdTo = dirname($argument);
+		my $dirName = basename($argument);
+		chdir($cwdTo);
+		my $newDirName = &purifyFName($dirName);
 		printf("Going to scan '%s'\n", $newDirName);
 		&scanDir($newDirName);
 	} else {
-		my $newName = &purifyFName($argument);
+		my $cwdTo = dirname($argument);
+		my $fileName = basename($argument);
+		chdir($cwdTo);
+		my $newName = &purifyFName($fileName);
 		printf("%s\n", $newName);
 	} # else -d $argument
 } # for $argument
