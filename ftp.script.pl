@@ -107,4 +107,3 @@ for my $argument (@ARGV) {
 	} # else -d $argument
 } # for $argument
 
-1;
