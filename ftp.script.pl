@@ -8,9 +8,8 @@ use warnings;
 use File::Basename;
 
 sub help {
-	print <<HELP
-	This is going to help!.
-HELP
+	printf("%s: script for clearing filenames of non-ASCII chars.\n");
+	printf("Usage: %s <PATH>\n", $0);
 	return 0;
 } # sub help
 
