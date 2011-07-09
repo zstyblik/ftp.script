@@ -53,13 +53,12 @@ sub purifyFName {
 			printf("No write permission to '%s'\n", $string);
 			last;
 		} # if ! -w $string
-		printf("%s:%s\n", $string, $newStr);
 		if ($string eq $newStr) {
 			printf("Files are the same [%s:%s]\n", $string, $newStr);
 			last;
 		}
 		# if $string =~ $newStr
-		print "Will rename $string -> $newStr\n";
+		printf("Will rename '%s' -> '%s'\n", $string, $newStr);
 		rename($string, $newStr) or die("Couldn't rename f/d, '$!'\n");
 		last;
 	} # while 1
