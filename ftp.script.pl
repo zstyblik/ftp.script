@@ -11,6 +11,7 @@ sub help {
 	print <<HELP
 	This is going to help!.
 HELP
+	return 0;
 } # sub help
 
 sub purifyFName {
