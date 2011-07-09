@@ -16,8 +16,7 @@ sub help {
 sub purifyFName {
 	my $self = $_;
 	my $string = shift || undef;
-	if (!$string)
-	{
+	if (!$string) {
 		return "";
 	}
 	my @charArr = split(//, $string);
@@ -103,7 +102,8 @@ for my $argument (@ARGV) {
 		printf("Going to scan '%s'\n", $newDirName);
 		&scanDir($newDirName);
 	} else {
-		print &purifyFName($argument)."\n";
+		my $newName = &purifyFName($argument);
+		printf("%s\n", $newName);
 	} # else -d $argument
 } # for $argument
 
