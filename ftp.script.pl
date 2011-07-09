@@ -74,10 +74,12 @@ sub scanDir {
 	closedir DIR;
 	foreach my $file (@files) {
 		if (-d $file) {
-			if ($file eq '+upload') {
-				next;
-			} # if $file eq +upload
-			my $newFile = &purifyFName($file);
+			my $newFile = "";
+			if ($file =~ /^\+/) {
+				$newFile = $file;
+			} else { 
+				$newFile = &purifyFName($file);
+			}# if $file eq +upload
 			printf("Diving into '%s'\n", $newFile);
 			&scanDir($newFile);
 		} else {
