@@ -111,18 +111,14 @@ if ($numArgs < 1) {
 } # if !$ARGV[0]
 
 for my $argument (@ARGV) {
+	my $cwdTo = dirname($argument);
+	my $baseName = basename($argument);
+	chdir($cwdTo) || die("Unable to chdir to '$!'.");
+	my $newName = &purifyFName($baseName);
 	if ( -d $argument ) {
-		my $cwdTo = dirname($argument);
-		my $dirName = basename($argument);
-		chdir($cwdTo);
-		my $newDirName = &purifyFName($dirName);
-		printf("Going to scan '%s'\n", $newDirName);
-		&scanDir($newDirName);
+		printf("Going to scan '%s'\n", $newName);
+		&scanDir($newName);
 	} else {
-		my $cwdTo = dirname($argument);
-		my $fileName = basename($argument);
-		chdir($cwdTo);
-		my $newName = &purifyFName($fileName);
 		printf("%s\n", $newName);
 	} # else -d $argument
 } # for $argument
