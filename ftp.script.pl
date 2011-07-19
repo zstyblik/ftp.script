@@ -115,7 +115,7 @@ for my $argument (@ARGV) {
 	my $baseName = basename($argument);
 	chdir($cwdTo) || die("Unable to chdir to '$!'.");
 	my $newName = &purifyFName($baseName);
-	if ( -d $argument ) {
+	if ( -d $newName ) {
 		printf("Going to scan '%s'\n", $newName);
 		&scanDir($newName);
 	} else {
