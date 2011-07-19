@@ -13,7 +13,7 @@ sub help {
 	return 0;
 } # sub help
 
-sub purifyFName {
+sub purifyFilename {
 	my $self = $_;
 	my $string = shift || undef;
 	if (!$string) {
@@ -63,7 +63,7 @@ sub purifyFName {
 		last;
 	} # while 1
 	return $newStr;
-} # sub rename
+} # sub purifyFilename
 
 sub scanDir {
 	my $self = $_;
@@ -76,12 +76,12 @@ sub scanDir {
 		if (-d $file) {
 			my $newFile = $file;
 			if ($file !~ /^\+/) {
-				$newFile = &purifyFName($file);
+				$newFile = &purifyFilename($file);
 			}# if $file !~
 			printf("Diving into '%s'\n", $newFile);
 			&scanDir($newFile);
 		} else {
-			&purifyFName($file);
+			&purifyFilename($file);
 		} # if -d $file
 	} # while $file
 	chdir('../');
@@ -114,7 +114,7 @@ for my $argument (@ARGV) {
 	my $cwdTo = dirname($argument);
 	my $baseName = basename($argument);
 	chdir($cwdTo) || die("Unable to chdir to '$!'.");
-	my $newName = &purifyFName($baseName);
+	my $newName = &purifyFilename($baseName);
 	if ( -d $newName ) {
 		printf("Going to scan '%s'\n", $newName);
 		&scanDir($newName);
