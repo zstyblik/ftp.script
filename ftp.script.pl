@@ -18,7 +18,10 @@ sub purifyFilename {
 	my $string = shift || undef;
 	if (!$string) {
 		return "";
-	}
+	} # if !$string
+	if ($string =~ /^\+/ && -d $string) {
+		return $string;
+	} # if $string =~ 
 	my @charArr = split(//, $string);
 	my $newStr = '';
 
@@ -41,7 +44,7 @@ sub purifyFilename {
 	} # for $i
 	foreach (@arrNewStr) {
 		$newStr = $newStr.$_;
-	}
+	} # foreach @arrNewStr
 	while (1) {
 		# what's the length of new string?
 		if (length($newStr) < 1 && $newStr =~ /^[\.]+$/) {
@@ -56,8 +59,7 @@ sub purifyFilename {
 		if ($string eq $newStr) {
 			printf("Files are the same [%s:%s]\n", $string, $newStr);
 			last;
-		}
-		# if $string =~ $newStr
+		} # if $string eq $newStr
 		printf("Will rename '%s' -> '%s'\n", $string, $newStr);
 		rename($string, $newStr) or die("Couldn't rename f/d, '$!'\n");
 		last;
@@ -74,10 +76,7 @@ sub scanDir {
 	closedir DIR;
 	foreach my $file (@files) {
 		if (-d $file) {
-			my $newFile = $file;
-			if ($file !~ /^\+/) {
-				$newFile = &purifyFilename($file);
-			}# if $file !~
+			$newFile = &purifyFilename($file);
 			printf("Diving into '%s'\n", $newFile);
 			&scanDir($newFile);
 		} else {
