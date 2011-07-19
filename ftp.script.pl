@@ -76,7 +76,7 @@ sub scanDir {
 	closedir DIR;
 	foreach my $file (@files) {
 		if (-d $file) {
-			$newFile = &purifyFilename($file);
+			my $newFile = &purifyFilename($file);
 			printf("Diving into '%s'\n", $newFile);
 			&scanDir($newFile);
 		} else {
